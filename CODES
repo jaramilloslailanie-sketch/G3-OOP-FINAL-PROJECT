@@ -1,0 +1,500 @@
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+/**
+ * Money Made Easy - a console-based personal money manager.
+ * Data is saved locally in a plain-text file, one file per profile.
+ */
+public class MoneyMadeEasy {
+
+    private static final Scanner INPUT = new Scanner(System.in);
+    private static final String[] CATEGORIES = {"Food", "Transport", "Bills", "Savings", "Other"};
+    private static final BigDecimal MAX_AMOUNT = new BigDecimal("1000000000");
+    private static final BigDecimal WARN_RATIO = new BigDecimal("0.80");
+    private static final DateTimeFormatter DISPLAY_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    private static Profile profile;
+    private static Ledger ledger;
+
+    // ------------------------------------------------------------------ main
+
+    public static void main(String[] args) {
+        System.out.println("==================================================");
+        System.out.println("  Money Made Easy");
+        System.out.println("  Your Daily Low-Stress Personal Money Manager");
+        System.out.println("==================================================");
+        showProfileMenu();
+    }
+
+    // ----------------------------------------------------------------- menus
+
+    private static void showProfileMenu() {
+        while (true) {
+            System.out.println("\n----------- PROFILE SELECTION -----------");
+            System.out.println("1. Student Mode");
+            System.out.println("2. Worker Mode");
+            System.out.println("3. Exit");
+            String choice = prompt("Enter your choice: ");
+
+            switch (choice) {
+                case "1":
+                    startSession(new Profile("Student",
+                            "Schedule adapted for class and study routines",
+                            "Tip: set a weekly-friendly Food and Transport budget to stretch your allowance."));
+                    break;
+                case "2":
+                    startSession(new Profile("Worker",
+                            "Schedule adapted for fixed work hours",
+                            "Tip: log your salary as Income and put a limit on Bills and Savings."));
+                    break;
+                case "3":
+                    quit();
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void startSession(Profile p) {
+        profile = p;
+        ledger = new Ledger(Paths.get("finance_" + p.getType().toLowerCase() + ".txt"));
+        System.out.println("\nLoaded " + ledger.size() + " saved transaction(s) for " + p.getType() + " profile.");
+        showMainMenu();
+    }
+
+    private static void showMainMenu() {
+        while (true) {
+            System.out.println("\n----------- MAIN MENU -----------");
+            System.out.println("Current Profile: " + profile.getType());
+            System.out.println("Mode: " + profile.getDescription());
+            System.out.println(profile.getTip());
+            System.out.println("---------------------------------");
+            System.out.println("1. Log Income or Expense");
+            System.out.println("2. Set Budget Limit");
+            System.out.println("3. View Budgets (this month)");
+            System.out.println("4. View Spending Summary");
+            System.out.println("5. View Recent Transactions");
+            System.out.println("6. Delete a Transaction");
+            System.out.println("7. Switch Profile");
+            System.out.println("8. Exit");
+            String choice = prompt("Enter your choice: ");
+
+            switch (choice) {
+                case "1": logTransaction(); break;
+                case "2": setBudgetLimit(); break;
+                case "3": showBudgets(); break;
+                case "4": showSummary(); break;
+                case "5": showRecent(); break;
+                case "6": deleteTransaction(); break;
+                case "7": return;
+                case "8": quit(); break;
+                default:  System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    // ------------------------------------------------------------- actions
+
+    private static void logTransaction() {
+        System.out.println("\n----- Quick Transaction Logging -----");
+        System.out.println("1. Income");
+        System.out.println("2. Expense");
+        String typeChoice = prompt("Select type: ");
+
+        Transaction.Type type;
+        if (typeChoice.equals("1")) {
+            type = Transaction.Type.INCOME;
+        } else if (typeChoice.equals("2")) {
+            type = Transaction.Type.EXPENSE;
+        } else {
+            System.out.println("Invalid type.");
+            return;
+        }
+
+        BigDecimal amount = readMoney("Enter amount: ", false);
+        if (amount == null) return;
+
+        String category = readCategory();
+        String desc = Transaction.clean(prompt("Enter short description (optional): "));
+
+        // Check the budget BEFORE saving, so the new amount is not counted twice.
+        String warning = "";
+        if (type == Transaction.Type.EXPENSE) {
+            warning = ledger.checkBudget(category, amount);
+        }
+
+        ledger.add(new Transaction(type, amount, category, desc, LocalDateTime.now()));
+
+        if (!warning.isEmpty()) {
+            System.out.println("\nNOTICE: " + warning);
+        }
+        System.out.println("Transaction saved successfully.");
+    }
+
+    private static void setBudgetLimit() {
+        System.out.println("\n----- Set Budget Limit -----");
+        String category = readCategory();
+        BigDecimal limit = readMoney("Enter monthly budget limit (0 removes the limit): ", true);
+        if (limit == null) return;
+
+        if (limit.signum() == 0) {
+            ledger.removeBudget(category);
+            System.out.println("Budget limit removed for " + category + ".");
+        } else {
+            ledger.setBudget(category, limit);
+            System.out.println("Monthly budget limit for " + category + " set to " + money(limit) + ".");
+        }
+    }
+
+    private static void showBudgets() {
+        System.out.println("\n----- Budgets for " + YearMonth.now() + " -----");
+        Map<String, BigDecimal> budgets = ledger.getBudgets();
+        if (budgets.isEmpty()) {
+            System.out.println("No budget limits set yet. Use option 2 to add one.");
+            return;
+        }
+        System.out.printf("%-14s %12s %12s %12s%n", "Category", "Limit", "Spent", "Left");
+        for (Map.Entry<String, BigDecimal> e : budgets.entrySet()) {
+            BigDecimal spent = ledger.spentInMonth(e.getKey(), YearMonth.now());
+            BigDecimal left = e.getValue().subtract(spent);
+            String flag = left.signum() < 0 ? "  OVER" : "";
+            System.out.printf("%-14s %12s %12s %12s%s%n",
+                    e.getKey(), money(e.getValue()), money(spent), money(left), flag);
+        }
+    }
+
+    private static void showSummary() {
+        System.out.println("\n----- Clear Spending Summary -----");
+        System.out.println(ledger.getSummary());
+        System.out.println("All financial data saved locally. Safe and Private.");
+    }
+
+    private static void showRecent() {
+        List<Transaction> all = ledger.getAll();
+        System.out.println("\n----- Recent Transactions (newest first) -----");
+        if (all.isEmpty()) {
+            System.out.println("No transactions yet.");
+            return;
+        }
+        int shown = 0;
+        for (int i = all.size() - 1; i >= 0 && shown < 15; i--, shown++) {
+            Transaction t = all.get(i);
+            System.out.printf("#%-3d %s  %-8s %12s  %-10s %s%n",
+                    i + 1, t.getDate().format(DISPLAY_DATE), t.getType().label(),
+                    money(t.getAmount()), t.getCategory(), t.getDescription());
+        }
+        if (all.size() > shown) {
+            System.out.println("(showing latest " + shown + " of " + all.size() + ")");
+        }
+    }
+
+    private static void deleteTransaction() {
+        showRecent();
+        if (ledger.size() == 0) return;
+
+        String text = prompt("Enter the # to delete (or press Enter to cancel): ");
+        if (text.isEmpty()) return;
+
+        int number;
+        try {
+            number = Integer.parseInt(text.replace("#", ""));
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number.");
+            return;
+        }
+        if (number < 1 || number > ledger.size()) {
+            System.out.println("No transaction with that number.");
+            return;
+        }
+        String confirm = prompt("Delete transaction #" + number + "? (y/n): ");
+        if (confirm.equalsIgnoreCase("y")) {
+            ledger.remove(number - 1);
+            System.out.println("Transaction deleted.");
+        } else {
+            System.out.println("Cancelled.");
+        }
+    }
+
+    // ------------------------------------------------------- input helpers
+
+    /** Reads a trimmed line. Exits cleanly if the input stream ends (Ctrl+D / Ctrl+Z). */
+    private static String prompt(String message) {
+        System.out.print(message);
+        if (!INPUT.hasNextLine()) {
+            System.out.println();
+            quit();
+        }
+        return INPUT.nextLine().trim();
+    }
+
+    /** Reads a money amount. Returns null (after printing why) if the input is invalid. */
+    private static BigDecimal readMoney(String message, boolean allowZero) {
+        String text = prompt(message).replace(",", "");
+        BigDecimal value;
+        try {
+            value = new BigDecimal(text);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid amount entered.");
+            return null;
+        }
+        if (value.signum() < 0 || (!allowZero && value.signum() == 0)) {
+            System.out.println(allowZero ? "Amount cannot be negative." : "Amount must be a positive number.");
+            return null;
+        }
+        if (value.compareTo(MAX_AMOUNT) > 0) {
+            System.out.println("Amount is too large.");
+            return null;
+        }
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /** Lets the user pick a category by number or type their own. Always returns a normalized name. */
+    private static String readCategory() {
+        System.out.print("Categories: ");
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            System.out.print((i + 1) + "=" + CATEGORIES[i] + (i < CATEGORIES.length - 1 ? ", " : "\n"));
+        }
+        String text = prompt("Pick a number or type a category (blank = Other): ");
+        if (text.isEmpty()) return "Other";
+        if (text.matches("[1-9]")) {
+            int idx = Integer.parseInt(text) - 1;
+            if (idx < CATEGORIES.length) return CATEGORIES[idx];
+        }
+        return Transaction.normalizeCategory(text);
+    }
+
+    private static String money(BigDecimal value) {
+        return String.format("%,.2f", value);
+    }
+
+    private static void quit() {
+        System.out.println("Exiting system. Goodbye.");
+        System.exit(0);
+    }
+
+    // ------------------------------------------------------------- classes
+
+    static class Profile {
+        private final String type;
+        private final String description;
+        private final String tip;
+
+        Profile(String type, String description, String tip) {
+            this.type = type;
+            this.description = description;
+            this.tip = tip;
+        }
+
+        String getType() { return type; }
+        String getDescription() { return description; }
+        String getTip() { return tip; }
+    }
+
+    static class Transaction {
+        enum Type {
+            INCOME("Income"), EXPENSE("Expense");
+            private final String label;
+            Type(String label) { this.label = label; }
+            String label() { return label; }
+        }
+
+        private final Type type;
+        private final BigDecimal amount;
+        private final String category;
+        private final String description;
+        private final LocalDateTime date;
+
+        Transaction(Type type, BigDecimal amount, String category, String description, LocalDateTime date) {
+            this.type = type;
+            this.amount = amount;
+            this.category = category;
+            this.description = description;
+            this.date = date;
+        }
+
+        Type getType() { return type; }
+        BigDecimal getAmount() { return amount; }
+        String getCategory() { return category; }
+        String getDescription() { return description; }
+        LocalDateTime getDate() { return date; }
+
+        /** Removes characters that would break the tab-separated save format. */
+        static String clean(String text) {
+            return text.replaceAll("[\\t\\r\\n]+", " ").trim();
+        }
+
+        /** "fOOD" -> "Food", so "food" and "Food" are treated as the same category. */
+        static String normalizeCategory(String text) {
+            String t = clean(text);
+            if (t.isEmpty()) return "Other";
+            return t.substring(0, 1).toUpperCase() + t.substring(1).toLowerCase();
+        }
+
+        String toLine() {
+            return "T\t" + type.name() + "\t" + amount.toPlainString() + "\t" + category
+                    + "\t" + description + "\t" + date;
+        }
+
+        static Transaction fromParts(String[] p) {
+            return new Transaction(Type.valueOf(p[1]), new BigDecimal(p[2]), p[3], p[4],
+                    LocalDateTime.parse(p[5]));
+        }
+    }
+
+    static class Ledger {
+        private final Path file;
+        private final List<Transaction> records = new ArrayList<>();
+        private final Map<String, BigDecimal> budgets = new TreeMap<>();
+
+        Ledger(Path file) {
+            this.file = file;
+            load();
+        }
+
+        int size() { return records.size(); }
+        List<Transaction> getAll() { return records; }
+        Map<String, BigDecimal> getBudgets() { return budgets; }
+
+        void add(Transaction t) { records.add(t); save(); }
+        void remove(int index) { records.remove(index); save(); }
+        void setBudget(String category, BigDecimal limit) { budgets.put(category, limit); save(); }
+        void removeBudget(String category) { budgets.remove(category); save(); }
+
+        BigDecimal spentInMonth(String category, YearMonth month) {
+            BigDecimal total = BigDecimal.ZERO;
+            for (Transaction t : records) {
+                if (t.getType() == Transaction.Type.EXPENSE
+                        && t.getCategory().equalsIgnoreCase(category)
+                        && YearMonth.from(t.getDate()).equals(month)) {
+                    total = total.add(t.getAmount());
+                }
+            }
+            return total;
+        }
+
+        /** Call BEFORE adding the new expense. Returns a warning, or "" if all is fine. */
+        String checkBudget(String category, BigDecimal newAmount) {
+            BigDecimal limit = budgets.get(category);
+            if (limit == null) return "";
+
+            BigDecimal spent = spentInMonth(category, YearMonth.now());
+            BigDecimal after = spent.add(newAmount);
+
+            if (after.compareTo(limit) > 0) {
+                return "You are OVER your monthly budget for " + category + ". Limit: " + fmt(limit)
+                        + ", spent so far: " + fmt(spent) + ", after this entry: " + fmt(after);
+            }
+            if (after.compareTo(limit.multiply(WARN_RATIO)) >= 0) {
+                return "You are approaching your monthly budget for " + category + ". Limit: " + fmt(limit)
+                        + ", after this entry: " + fmt(after);
+            }
+            return "";
+        }
+
+        String getSummary() {
+            BigDecimal income = BigDecimal.ZERO;
+            BigDecimal expense = BigDecimal.ZERO;
+            BigDecimal monthIncome = BigDecimal.ZERO;
+            BigDecimal monthExpense = BigDecimal.ZERO;
+            Map<String, BigDecimal> categoryTotals = new LinkedHashMap<>();
+            YearMonth now = YearMonth.now();
+
+            for (Transaction t : records) {
+                boolean thisMonth = YearMonth.from(t.getDate()).equals(now);
+                if (t.getType() == Transaction.Type.INCOME) {
+                    income = income.add(t.getAmount());
+                    if (thisMonth) monthIncome = monthIncome.add(t.getAmount());
+                } else {
+                    expense = expense.add(t.getAmount());
+                    if (thisMonth) monthExpense = monthExpense.add(t.getAmount());
+                    categoryTotals.merge(t.getCategory(), t.getAmount(), BigDecimal::add);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("ALL TIME%n"));
+            sb.append(String.format("  Total Income:  %,15.2f%n", income));
+            sb.append(String.format("  Total Expense: %,15.2f%n", expense));
+            sb.append(String.format("  Net Balance:   %,15.2f%n%n", income.subtract(expense)));
+            sb.append(String.format("THIS MONTH (%s)%n", now));
+            sb.append(String.format("  Income:        %,15.2f%n", monthIncome));
+            sb.append(String.format("  Expense:       %,15.2f%n", monthExpense));
+            sb.append(String.format("  Net:           %,15.2f%n%n", monthIncome.subtract(monthExpense)));
+            sb.append(String.format("Spending by Category (all time):%n"));
+            if (categoryTotals.isEmpty()) {
+                sb.append(String.format("  (no expenses yet)%n"));
+            }
+            for (Map.Entry<String, BigDecimal> e : categoryTotals.entrySet()) {
+                sb.append(String.format("  %-14s %,12.2f%n", e.getKey() + ":", e.getValue()));
+            }
+            return sb.toString();
+        }
+
+        private static String fmt(BigDecimal v) {
+            return String.format("%,.2f", v);
+        }
+
+        // ---- persistence (plain text, tab-separated) ----
+
+        private void save() {
+            List<String> lines = new ArrayList<>();
+            for (Map.Entry<String, BigDecimal> e : budgets.entrySet()) {
+                lines.add("B\t" + e.getKey() + "\t" + e.getValue().toPlainString());
+            }
+            for (Transaction t : records) {
+                lines.add(t.toLine());
+            }
+            try {
+                Files.write(file, lines, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                System.out.println("Warning: Could not save data to file (" + e.getMessage() + ").");
+            }
+        }
+
+        private void load() {
+            if (!Files.exists(file)) return;
+            List<String> lines;
+            try {
+                lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                System.out.println("Warning: Could not read saved data. Starting fresh.");
+                return;
+            }
+            int skipped = 0;
+            for (String line : lines) {
+                if (line.isBlank()) continue;
+                try {
+                    String[] p = line.split("\t", -1);
+                    if (p[0].equals("T") && p.length == 6) {
+                        records.add(Transaction.fromParts(p));
+                    } else if (p[0].equals("B") && p.length == 3) {
+                        budgets.put(p[1], new BigDecimal(p[2]));
+                    } else {
+                        skipped++;
+                    }
+                } catch (RuntimeException e) {
+                    skipped++;
+                }
+            }
+            if (skipped > 0) {
+                System.out.println("Warning: skipped " + skipped + " unreadable line(s) in " + file + ".");
+            }
+        }
+    }
+}
