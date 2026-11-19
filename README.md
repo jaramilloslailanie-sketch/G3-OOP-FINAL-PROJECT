@@ -51,9 +51,10 @@
 
 ## 👨‍💻 Team Members and Roles
 | Name | Role |
-|PE|------|
-| *[Your Name]* | Lead Developer — Full system design & implementation |
-| *[Teammate Names]* | *Add roles here* |
+|Perez, Klein lei renz J.|Lead Proggrammer|
+|Montalbo, Jan Denver D.| Project Leader|
+|Robles, Ma. Ronalene  | System/Design Lead|
+|Falcutila, Matthew Ken | Documentation | 
 
 ---
 
