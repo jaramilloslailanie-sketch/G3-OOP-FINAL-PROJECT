@@ -141,9 +141,6 @@ Enter your choice: 1
 Loaded 0 saved transaction(s) for Student profile.
 
 ```
-
-
-
 ### Main Menu
 ```
 
@@ -166,9 +163,6 @@ Tip: set a weekly-friendly Food and Transport budget to stretch your allowance.
 Enter your choice:
 
 ```
-
-
-
 ### Logging a Transaction
 ```
 
@@ -184,9 +178,6 @@ Enter short description (optional): Lunch at school
 Transaction saved successfully.
 
 ```
-
-
-
 ### Setting a Budget
 ```
 
@@ -198,9 +189,6 @@ Enter monthly budget limit (0 removes the limit): 2000
 Monthly budget limit for Food set to 2,000.00.
 
 ```
-
-
-
 ### Viewing Budgets
 ```
 
@@ -212,7 +200,6 @@ Category          Limit        Spent        Left
 Food             2,000.00       150.00     1,850.00
 
 ```
-
 ### Spending Summary
 ```
 
@@ -233,9 +220,6 @@ Food:                     150.00
 All financial data saved locally. Safe and Private.
 
 ```
-
-
-
 ### Recent Transactions
 ```
 
@@ -243,8 +227,6 @@ All financial data saved locally. Safe and Private.
 #1    2026-11-19 23:45    Expense        150.00    Food        Lunch at school
 
 ```
-
-
 ### Budget Warning Example
 ```
 
@@ -262,9 +244,6 @@ NOTICE: You are approaching your monthly budget for Food. Limit: 2,000.00, spent
 Transaction saved successfully.
 
 ```
-
-
-
 ### Deleting a Transaction
 ```
 
@@ -276,9 +255,6 @@ Delete transaction #1? (y/n): y
 Transaction deleted.
 
 ```
-
-
-
 ### Switching Profile & Exiting
 ```
 
