@@ -122,10 +122,10 @@ java MoneyMadeEasy
    - Exit when done
 ```
 ## 🖥️ Sample Output
-
+```
 ### Welcome & Profile Selection
 ```
-
+```
 ==================================================
 Money Made Easy
 Your Daily Low-Stress Personal Money Manager
@@ -140,10 +140,10 @@ Enter your choice: 1
 
 Loaded 0 saved transaction(s) for Student profile.
 
-```
-### Main Menu
-```
 
+### Main Menu
+
+```
 ----------- MAIN MENU -----------
 Current Profile: Student
 Mode: Schedule adapted for class and study routines
@@ -271,3 +271,4 @@ Loaded 0 saved transaction(s) for Worker profile.
 
 Enter your choice: 8
 Exiting system. Goodbye.
+```
