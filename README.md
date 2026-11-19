@@ -120,16 +120,15 @@ java MoneyMadeEasy
    - View spending summaries and transactions
    - Delete entries or switch profiles
    - Exit when done
-```
+
 ## 🖥️ Sample Output
 ```
 ### Welcome & Profile Selection
 ```
 ```
-==================================================
+
 Money Made Easy
 Your Daily Low-Stress Personal Money Manager
-==================================================
 
 ----------- PROFILE SELECTION -----------
 
