@@ -60,11 +60,45 @@
 ---
 
 ## 🧩 OOP Concepts Demonstrated
-- **Encapsulation** — `Profile`, `Transaction`, and `Ledger` classes protect their internal data
-- **Classes & Objects** — System organized into logical, reusable components
-- **Enumerations** — `Transaction.Type` ensures consistent income/expense values
-- **Abstraction** — File operations and data management are hidden inside the `Ledger` class
-- **Instance & Static Members** — Clear separation between shared constants and object-specific data
+
+### 1. Encapsulation
+Data is kept `private` inside each class and accessed only through controlled methods, protecting it from unintended changes.
+
+```java
+public class MoneyMadeEasy {
+    
+    // Inner classes — share and extend the main class context
+    static class Profile { ... }
+    static class Transaction { ... }
+    static class Ledger { ... }
+}
+
+
+###2. Inheritance
+
+public class MoneyMadeEasy {
+    
+    // Inner classes — share and extend the main class context
+    static class Profile { ... }
+    static class Transaction { ... }
+    static class Ledger { ... }
+}
+
+###3. Polymorphism
+
+// Same file handles TWO different object types
+if (p[0].equals("T")) {
+    records.add(Transaction.fromParts(p));  // ← Transaction
+} else if (p[0].equals("B")) {
+    budgets.put(p[1], new BigDecimal(p[2])); // ← Budget
+}
+
+###4. Abstraction
+
+// Simple interface — no need to see the 100+ lines inside
+ledger.add(transaction);
+ledger.getSummary();
+ledger.setBudget("Food", new BigDecimal("5000"));
 
 ---
 
