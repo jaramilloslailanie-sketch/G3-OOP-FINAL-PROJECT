@@ -318,7 +318,7 @@ Exiting system. Goodbye.
 **Project:** Money Made Easy — Your Daily Low-Stress Personal Money Manager
 
 ### 📧 Contact
-- **GitHub:** [[Your GitHub Link Here](https://github.com/jaramilloslailanie-sketch)]
+- **GitHub:** [(https://github.com/jaramilloslailanie-sketch)]
 - **Email:** [jaramilloslailanie@gmail,com]
 
 ---
