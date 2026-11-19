@@ -122,13 +122,13 @@ java MoneyMadeEasy
    - Exit when done
 
 ## 🖥️ Sample Output
-```
+
 ### Welcome & Profile Selection
 ```
-```
-
+==================================================
 Money Made Easy
 Your Daily Low-Stress Personal Money Manager
+==================================================
 
 ----------- PROFILE SELECTION -----------
 
@@ -138,8 +138,7 @@ Your Daily Low-Stress Personal Money Manager
 Enter your choice: 1
 
 Loaded 0 saved transaction(s) for Student profile.
-
-
+```
 ### Main Menu
 
 ```
@@ -160,11 +159,10 @@ Tip: set a weekly-friendly Food and Transport budget to stretch your allowance.
 8. Exit
 
 Enter your choice:
-
 ```
+
 ### Logging a Transaction
 ```
-
 ----- Quick Transaction Logging -----
 
 1. Income
@@ -177,31 +175,27 @@ Enter short description (optional): Lunch at school
 Transaction saved successfully.
 
 ```
+
 ### Setting a Budget
 ```
-
 ----- Set Budget Limit -----
 Categories: 1=Food, 2=Transport, 3=Bills, 4=Savings, 5=Other
 Pick a number or type a category (blank = Other): 1
 Enter monthly budget limit (0 removes the limit): 2000
 
 Monthly budget limit for Food set to 2,000.00.
-
 ```
+
 ### Viewing Budgets
-```
 
------ Budgets for 2026-11 -----
+```
+---- Budgets for 2026-11 -----
 Category          Limit        Spent        Left
-
----
-
-Food             2,000.00       150.00     1,850.00
-
 ```
+
 ### Spending Summary
-```
 
+```
 ----- Clear Spending Summary -----
 ALL TIME
 Total Income:            0.00
@@ -217,19 +211,17 @@ Spending by Category (all time):
 Food:                     150.00
 
 All financial data saved locally. Safe and Private.
-
 ```
+
 ### Recent Transactions
 ```
-
 ----- Recent Transactions (newest first) -----
 #1    2026-11-19 23:45    Expense        150.00    Food        Lunch at school
-
 ```
+
 ### Budget Warning Example
 ```
-
------ Quick Transaction Logging -----
+---- Quick Transaction Logging -----
 
 1. Income
 2. Expense
@@ -241,22 +233,21 @@ Enter short description (optional): Groceries for the week
 
 NOTICE: You are approaching your monthly budget for Food. Limit: 2,000.00, spent so far: 150.00, after this entry: 2,050.00
 Transaction saved successfully.
-
 ```
+
 ### Deleting a Transaction
-```
 
------ Recent Transactions (newest first) -----
+```
+---- Recent Transactions (newest first) -----
 #1    2026-11-19 23:45    Expense        150.00    Food        Lunch at school
 
 Enter the # to delete (or press Enter to cancel): 1
 Delete transaction #1? (y/n): y
 Transaction deleted.
-
 ```
+
 ### Switching Profile & Exiting
 ```
-
 Enter your choice: 7
 
 ----------- PROFILE SELECTION -----------
@@ -271,3 +262,4 @@ Loaded 0 saved transaction(s) for Worker profile.
 Enter your choice: 8
 Exiting system. Goodbye.
 ```
+
