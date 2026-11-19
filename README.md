@@ -262,4 +262,72 @@ Loaded 0 saved transaction(s) for Worker profile.
 Enter your choice: 8
 Exiting system. Goodbye.
 ```
+## ⚠️ Known Limitations
+
+- **Console-only interface** — Text-based menu system only; no graphical user interface (GUI)
+- **Limited transaction display** — Shows only the latest 15 transactions; older entries cannot be viewed directly
+- **No search or filtering** — Cannot search transactions by date, description, or amount; no date-range filtering
+- **Plain text file storage** — Data saved in unencrypted `.txt` files; no password protection or encryption
+- **Manual backup only** — No automatic backup; users must manually copy `.txt` files to back up data
+- **Two fixed profiles only** — Only Student and Worker modes; cannot create additional custom profiles
+- **No transaction editing** — Entries cannot be modified after saving; must delete and re-enter if incorrect
+- **No undo function** — Deletions are permanent; no way to restore deleted transactions
+- **Monthly budgets only** — Budgets track current month only; no weekly, yearly, or historical budget views
+- **Offline only** — No cloud sync or multi-device access; data stays only on the local computer
+- **No data export** — Cannot export transactions to CSV, Excel, or other formats
+- **Fixed timestamp format** — Uses system time at entry; cannot backdate or future-date transactions
+- **Single currency format** — Displays only with fixed decimal formatting; no currency symbol selection
+- **No recurring transactions** — Cannot set up automatic/recurring income or expense entries
+- **No spending charts or graphs** — Text-based summaries only; no visual reports
+
+## 🔮 Future Improvements
+
+### 📊 Enhanced Reports & Visuals
+- Add spending charts and graphs for better visual analysis
+- Generate weekly, yearly, and custom date-range reports
+- Show budget trends and monthly comparisons
+
+### 🔐 Data Security & Backup
+- Add password protection for profile access
+- Encrypt saved data files for privacy
+- Include automatic backup and data restore options
+- Support export to CSV/Excel format
+
+### 📝 More Flexible Features
+- Allow editing of saved transactions instead of only deleting
+- Support recurring transactions (e.g., monthly salary, bills)
+- Enable custom date and time when entering transactions
+- Add more profile types or create unlimited custom profiles
+- Support multiple currencies
+
+### 🔍 Better Navigation & Search
+- Search transactions by keyword, date, category, or amount
+- View all transactions with pagination instead of only the latest 15
+- Add filter options to quickly find specific entries
+
+### 🖥️ User Experience
+- Build a graphical user interface (GUI) for easier use
+- Add confirmation prompts before exiting or deleting
+- Include an undo option for accidental deletions
+- Support dark/light display modes
+
+## 👤 Project Contributor
+
+**Name:** [PEREZ, KLEIN LEI RENZ J.]
+**Role:** LEAD PROGGRAMMER
+**Project:** Money Made Easy — Your Daily Low-Stress Personal Money Manager
+
+### 📧 Contact
+- **GitHub:** [[Your GitHub Link Here](https://github.com/jaramilloslailanie-sketch)]
+- **Email:** [jaramilloslailanie@gmail,com]
+
+---
+
+### 💡 Acknowledgments
+- Special thanks to everyone who provided feedback and suggestions to improve this project
+- Inspired by the need for a simple, offline, and private personal finance tool
+
+---
+
+> 📌 *This project was built for educational purposes using Java and Object-Oriented Programming principles.*
 
