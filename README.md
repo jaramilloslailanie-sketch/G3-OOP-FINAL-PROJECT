@@ -60,7 +60,7 @@
 ---
 
 ## 🧩 OOP Concepts Demonstrated
-
+---
 ### 1. Encapsulation
 Data is kept `private` inside each class and accessed only through controlled methods, protecting it from unintended changes.
 
@@ -73,7 +73,7 @@ public class MoneyMadeEasy {
     static class Ledger { ... }
 }
 
-
+---
 ###2. Inheritance
 
 public class MoneyMadeEasy {
@@ -83,7 +83,7 @@ public class MoneyMadeEasy {
     static class Transaction { ... }
     static class Ledger { ... }
 }
-
+---
 ###3. Polymorphism
 
 // Same file handles TWO different object types
@@ -92,7 +92,7 @@ if (p[0].equals("T")) {
 } else if (p[0].equals("B")) {
     budgets.put(p[1], new BigDecimal(p[2])); // ← Budget
 }
-
+---
 ###4. Abstraction
 
 // Simple interface — no need to see the 100+ lines inside
