@@ -72,10 +72,10 @@ public class MoneyMadeEasy {
     static class Transaction { ... }
     static class Ledger { ... }
 }
+```
 
----
 ###2. Inheritance
-
+```java
 public class MoneyMadeEasy {
     
     // Inner classes — share and extend the main class context
@@ -83,24 +83,24 @@ public class MoneyMadeEasy {
     static class Transaction { ... }
     static class Ledger { ... }
 }
----
+```
 ###3. Polymorphism
-
+```java
 // Same file handles TWO different object types
 if (p[0].equals("T")) {
     records.add(Transaction.fromParts(p));  // ← Transaction
 } else if (p[0].equals("B")) {
     budgets.put(p[1], new BigDecimal(p[2])); // ← Budget
 }
----
+```
 ###4. Abstraction
-
+```java
 // Simple interface — no need to see the 100+ lines inside
 ledger.add(transaction);
 ledger.getSummary();
 ledger.setBudget("Food", new BigDecimal("5000"));
 
----
+```
 
 ## 🚀 How to Run
 
