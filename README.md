@@ -120,3 +120,36 @@ java MoneyMadeEasy
    - View spending summaries and transactions
    - Delete entries or switch profiles
    - Exit when done
+## 🖥️ Sample Output
+```java
+==========================================
+Money Made Easy
+Your Daily Low-Stress Personal Money Manager
+==========================================
+
+--------- PROFILE SELECTION ---------
+
+1. Student Mode
+2. Worker Mode
+3. Exit
+Enter your choice: 1
+
+Loaded 0 saved transaction(s) for Student profile.
+
+--------- MAIN MENU ---------
+Current Profile: Student
+Mode: Schedule adapted for class and study routines
+Tip: set a weekly-friendly Food and Transport budget to stretch your allowance.
+
+---
+
+1. Log Income or Expense
+2. Set Budget Limit
+3. View Budgets (this month)
+4. View Spending Summary
+5. View Recent Transactions
+6. Delete a Transaction
+7. Switch Profile
+8. Exit
+
+Enter your choice:
