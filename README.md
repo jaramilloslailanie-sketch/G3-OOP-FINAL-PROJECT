@@ -112,3 +112,38 @@ ledger.setBudget("Food", new BigDecimal("5000"));
 2. Compile:
    ```bash
    javac MoneyMadeEasy.java
+###  Step 1 — Save the Code
+
+1. Copy the full Java source code
+2. Open a text editor (Notepad, VS Code, etc.)
+3. Paste the code and save the file as **`MoneyMadeEasy.java`**
+⚠️ Filename must match exactly — including capitalization!
+
+### 🛠️ Step 2 — Compile
+
+1. Open Terminal or Command Prompt
+2. Navigate to the file location:
+
+```
+cd path/to/your/folder
+```
+
+3. Compile with:
+
+```
+javac MoneyMadeEasy.java
+```
+
+✅ A new `MoneyMadeEasy.class` file will appear if successful
+
+### ▶️ Step 3 — Run
+
+```
+java MoneyMadeEasy
+```
+
+### 📌 Important Notes
+
+- Data files (`finance_student.txt`, `finance_worker.txt`) are created automatically
+- Keep these `.txt` files in the same folder — they store your transaction history
+- Choose **Exit** from the menu to close the program safely
