@@ -319,7 +319,7 @@ Exiting system. Goodbye.
 
 ### 📧 Contact
 - **GitHub:** [(https://github.com/jaramilloslailanie-sketch)]
-- **Email:** [jaramilloslailanie@gmail,com]
+- **Email:** [jaramilloslailanie@gmail.com]
 
 ---
 
