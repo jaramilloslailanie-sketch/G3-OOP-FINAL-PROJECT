@@ -74,7 +74,7 @@ public class MoneyMadeEasy {
 }
 ```
 
-###2. Inheritance
+### 2. Inheritance
 ```java
 public class MoneyMadeEasy {
     
@@ -84,7 +84,7 @@ public class MoneyMadeEasy {
     static class Ledger { ... }
 }
 ```
-###3. Polymorphism
+### 3. Polymorphism
 ```java
 // Same file handles TWO different object types
 if (p[0].equals("T")) {
@@ -93,7 +93,7 @@ if (p[0].equals("T")) {
     budgets.put(p[1], new BigDecimal(p[2])); // ← Budget
 }
 ```
-###4. Abstraction
+### 4. Abstraction
 ```java
 // Simple interface — no need to see the 100+ lines inside
 ledger.add(transaction);
