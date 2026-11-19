@@ -142,7 +142,7 @@ Loaded 0 saved transaction(s) for Student profile.
 
 ```
 
----
+
 
 ### Main Menu
 ```
@@ -167,7 +167,7 @@ Enter your choice:
 
 ```
 
----
+
 
 ### Logging a Transaction
 ```
@@ -185,7 +185,7 @@ Transaction saved successfully.
 
 ```
 
----
+
 
 ### Setting a Budget
 ```
@@ -199,7 +199,7 @@ Monthly budget limit for Food set to 2,000.00.
 
 ```
 
----
+
 
 ### Viewing Budgets
 ```
@@ -212,8 +212,6 @@ Category          Limit        Spent        Left
 Food             2,000.00       150.00     1,850.00
 
 ```
-
----
 
 ### Spending Summary
 ```
@@ -236,7 +234,7 @@ All financial data saved locally. Safe and Private.
 
 ```
 
----
+
 
 ### Recent Transactions
 ```
@@ -246,7 +244,6 @@ All financial data saved locally. Safe and Private.
 
 ```
 
----
 
 ### Budget Warning Example
 ```
@@ -266,7 +263,7 @@ Transaction saved successfully.
 
 ```
 
----
+
 
 ### Deleting a Transaction
 ```
@@ -280,7 +277,7 @@ Transaction deleted.
 
 ```
 
----
+
 
 ### Switching Profile & Exiting
 ```
