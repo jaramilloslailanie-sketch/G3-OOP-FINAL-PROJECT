@@ -102,48 +102,21 @@ ledger.setBudget("Food", new BigDecimal("5000"));
 
 ```
 
-## 🚀 How to Run
+## 🚀 Steps to Run
 
-### Prerequisites
-- Java JDK 8 or higher installed
-
-### Steps
-1. Save the code as `MoneyMadeEasy.java`
-2. Compile:
+1. Save the code as **`MoneyMadeEasy.java`** in a folder on your computer.
+2. Open that folder in **VS Code** (or any Java IDE).
+3. Open a terminal and compile the program:
    ```bash
    javac MoneyMadeEasy.java
-###  Step 1 — Save the Code
-
-1. Copy the full Java source code
-2. Open a text editor (Notepad, VS Code, etc.)
-3. Paste the code and save the file as **`MoneyMadeEasy.java`**
-⚠️ Filename must match exactly — including capitalization!
-
-### 🛠️ Step 2 — Compile
-
-1. Open Terminal or Command Prompt
-2. Navigate to the file location:
-
-```
-cd path/to/your/folder
-```
-
-3. Compile with:
-
-```
-javac MoneyMadeEasy.java
-```
-
-✅ A new `MoneyMadeEasy.class` file will appear if successful
-
-### ▶️ Step 3 — Run
-
+4. Run the compiled program:
 ```
 java MoneyMadeEasy
 ```
-
-### 📌 Important Notes
-
-- Data files (`finance_student.txt`, `finance_worker.txt`) are created automatically
-- Keep these `.txt` files in the same folder — they store your transaction history
-- Choose **Exit** from the menu to close the program safely
+5. Use the number-based menu to navigate through the app:
+   - Select your profile (Student or Worker)
+   - Log income or expenses
+   - Set monthly budget limits
+   - View spending summaries and transactions
+   - Delete entries or switch profiles
+   - Exit when done
