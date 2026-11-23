@@ -65,40 +65,51 @@
 Data is kept `private` inside each class and accessed only through controlled methods, protecting it from unintended changes.
 
 ```java
-public class MoneyMadeEasy {
+// In MoneyMadeEasyUI
+private final JFrame frame = new JFrame("Money Made Easy");
+private final JLabel profileLabel = new JLabel("No profile selected");
+private String profile = "Student";
+private Ledger ledger;
 
-    // Inner classes — share and extend the main class context
-    static class Profile { ... }
-    static class Transaction { ... }
-    static class Ledger { ... }
-}
+// In Ledger class
+private final Path file;
+private final List<Transaction> records = new ArrayList<>();
+private final Map<String, BigDecimal> budgets = new TreeMap<>();
+
 ```
 
 ### 2. Inheritance
 ```java
-public class MoneyMadeEasy {
+// JFrame, JPanel, JLabel, JButton — all extend java.awt.Component
+private final JFrame frame;
+private final JLabel profileLabel;
+JButton overview = sidebarButton("Overview", true);
 
-    // Inner classes — share and extend the main class context
-    static class Profile { ... }
-    static class Transaction { ... }
-    static class Ledger { ... }
-}
 ```
 ### 3. Polymorphism
 ```java
-// Same file handles TWO different object types
-if (p[0].equals("T")) {
-    records.add(Transaction.fromParts(p));  // ← Transaction
-} else if (p[0].equals("B")) {
-    budgets.put(p[1], new BigDecimal(p[2])); // ← Budget
+private JTable findTable(Component c) {
+    if (c instanceof JTable) return (JTable) c;
+    if (c instanceof Container) {
+        for (Component child : ((Container) c).getComponents()) {
+            JTable found = findTable(child);
+            if (found != null) return found;
+        }
+    }
+    return null;
 }
+
 ```
 ### 4. Abstraction
 ```java
-// Simple interface — no need to see the 100+ lines inside
-ledger.add(transaction);
-ledger.getSummary();
-ledger.setBudget("Food", new BigDecimal("5000"));
+// ✅ Public — easy to use
+public void add(Transaction t) { ... }
+public void remove(int i) { ... }
+public String getSummary() { ... }
+
+// 🔒 Private — hidden complexity
+private void save() { ... }
+private void load() { ... }
 
 ```
 
